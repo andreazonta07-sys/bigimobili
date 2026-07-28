@@ -407,7 +407,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 
 @media (max-width: 860px) {
   .chisiamo-grid { grid-template-columns: 1fr; }
-  .chisiamo-side { flex-direction: row; }
+  .chisiamo-side { flex-direction: row; align-items: flex-start; }
   .chisiamo-side-photo { flex: 1; }
 }
 @media (max-width: 560px) {
@@ -436,14 +436,14 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   grid-template-columns: repeat(var(--cols, 2), 1fr);
   align-items: start;
   gap: 2px;
-  background: var(--ink);
+  background: var(--bg-raised);
 }
 .categoria-photo {
   aspect-ratio: var(--ar);
   overflow: hidden;
   min-width: 0;
 }
-.categoria-photo img { width: 100%; height: 100%; object-fit: contain; background: var(--ink); }
+.categoria-photo img { width: 100%; height: 100%; object-fit: contain; background: var(--bg-raised); }
 .categoria-body { padding: clamp(1.4rem, 3vw, 2rem); }
 .categoria-body h3 {
   font-family: var(--display);
@@ -468,7 +468,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .gallery-track {
   display: flex;
   align-items: stretch;
-  gap: clamp(.7rem, 1.6vw, 1.2rem);
   width: max-content;
   animation: gallery-scroll-left var(--dur, 55s) linear infinite;
 }
@@ -488,6 +487,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   height: var(--row-h);
   width: auto;
   flex-shrink: 0;
+  margin-right: clamp(.7rem, 1.6vw, 1.2rem);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 10px 26px rgba(27, 24, 21, .16);

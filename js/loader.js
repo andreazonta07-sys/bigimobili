@@ -43,13 +43,13 @@
     return;
   }
 
-  /* stato iniziale via gsap.set: mai una posizione impostata staticamente via CSS */
+  /* stato iniziale via gsap.set: mai una posizione impostata staticamente via CSS.
+     "Bi.Gi." e "Mobili" restano scostati e invisibili per tutta la fase di
+     caricamento: l'unico indicatore di avanzamento è la riga che si allunga.
+     Le due parole convergono soltanto a caricamento completato, in converge(). */
   gsap.set(wordTop, { y: -26, opacity: 0 });
   gsap.set(wordBottom, { y: 26, opacity: 0 });
   gsap.set(lineFill, { scaleX: 0 });
-
-  gsap.to(wordTop, { y: 0, opacity: 1, duration: .7, ease: "power2.out", delay: .1 });
-  gsap.to(wordBottom, { y: 0, opacity: 1, duration: .7, ease: "power2.out", delay: .18 });
 
   /* ---- progresso reale: alcune foto chiave + font ---- */
   var assets = [

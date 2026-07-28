@@ -64,6 +64,14 @@
   /* ---------- Hero: pin + zoom scrub sullo sfondo segnaposto ---------- */
   var heroPin = document.querySelector('.hero-pin');
   var heroBg = document.querySelector('.hero-bg');
+  var heroScroll = document.querySelector('.hero-scroll');
+  /* l'intro (heroIntro, sotto) porta .hero-scroll a opacity:1 con uno stile
+     inline: da quel momento in poi solo GSAP può farlo sparire allo scroll,
+     la regola CSS .scrolled-past non basterebbe più (l'inline vince sempre). */
+  function updateScrollHint(progress) {
+    if (!heroScroll || !hasG) return;
+    gsap.to(heroScroll, { opacity: progress > 0.02 ? 0 : 1, duration: .3, overwrite: 'auto' });
+  }
   if (heroPin && hasG && window.ScrollTrigger) {
     if (heroBg) gsap.set(heroBg, { scale: 1, transformOrigin: '50% 45%' });
 
@@ -76,6 +84,7 @@
           scrub: 1,
           onUpdate: function (self) {
             heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
+            updateScrollHint(self.progress);
           }
         }
       }).to(heroBg, { scale: 2.15, ease: 'none', duration: 1 }, 0);
@@ -86,6 +95,7 @@
         end: 'bottom bottom',
         onUpdate: function (self) {
           heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
+          updateScrollHint(self.progress);
         }
       });
     }
