@@ -600,16 +600,19 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .recensioni-dark .eyebrow { color: var(--wood-light); }
 .recensioni-dark .section-heading { color: var(--bg); }
 
-/* pannello foto: la foto (1440x1800, verticale) resta sempre intera e mai
-   tagliata, a larghezza piena; l'altezza del pannello e' quella del piu'
-   alto tra "foto alla sua proporzione naturale" e "elenco recensioni" —
-   tecnica a griglia (tutti i livelli nella stessa cella), cosi' se le
-   recensioni sono piu' "lunghe" della foto il pannello cresce con loro
-   invece di tagliarle, e se sono piu' corte non lascia comunque scoperto
-   il fondo (resta ink pieno sotto la foto). */
+/* pannello foto: l'altezza del pannello e' fissata esattamente sulla
+   proporzione naturale della foto (recensioni-boiserie-doghe.webp,
+   1440x1800 reali, verificati con sips -g) cosi' la foto (posizionata in
+   assoluto, object-fit:contain sulla stessa identica proporzione) copre
+   sempre tutta l'area, senza mai lasciare "spazio nero" scoperto e senza
+   bisogno di ritagliarla o ingrandirla. L'elenco recensioni e' un overlay
+   assoluto sopra la foto: se il suo contenuto e' piu' alto della foto,
+   scorre internamente invece di allungare il pannello (altrimenti si
+   ripresenterebbe lo stesso problema al contrario). */
 .recensioni-photo-panel {
-  display: grid;
+  position: relative;
   width: min(100%, 1200px);
+  aspect-ratio: 1440 / 1800;
   margin: clamp(2.6rem, 6vw, 4rem) auto 0;
   border-radius: 14px;
   overflow: hidden;
@@ -617,23 +620,26 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   background: var(--ink);
 }
 .recensioni-photo-panel img {
-  grid-area: 1 / 1;
-  align-self: start;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 .recensioni-photo-panel::before {
   content: '';
-  grid-area: 1 / 1;
+  position: absolute;
+  inset: 0;
   background: linear-gradient(180deg, rgba(20, 18, 16, .62), rgba(20, 18, 16, .75));
   z-index: 1;
 }
 
 .reviews-list {
-  grid-area: 1 / 1;
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
+  overflow-y: auto;
   padding: clamp(2.4rem, 6vw, 4.4rem) clamp(1rem, 4vw, 2.4rem);
   display: flex;
   flex-direction: column;
