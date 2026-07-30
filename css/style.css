@@ -59,6 +59,18 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   place-items: center;
   overflow: hidden;
 }
+.loader-photo {
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/hero-facciata.webp");
+  background-size: cover;
+  background-position: 68% 55%;
+}
+.loader-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(251, 249, 244, .82);
+}
 .loader-pattern {
   position: absolute;
   inset: 0;
@@ -110,6 +122,14 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   transform-origin: left;
   /* stato iniziale (scaleX:0) impostato via gsap.set() in js/loader.js,
      mai staticamente qui: è una proprietà che verrà animata nel tempo */
+}
+.loader-percent {
+  font-family: var(--display);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(.8rem, 1.6vw, .95rem);
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--ink-soft);
 }
 body.is-loading { overflow: hidden; }
 .loader.is-hidden { pointer-events: none; }

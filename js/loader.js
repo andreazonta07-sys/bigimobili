@@ -21,9 +21,12 @@
   var wordBottom = document.getElementById("preloader-bottom");
   var line = wordTop && wordTop.parentNode ? wordTop.parentNode.querySelector(".loader-line") : null;
   var lineFill = document.getElementById("preloader-line-fill");
+  var percentEl = document.getElementById("preloader-percent");
   var logo = document.getElementById("preloader-logo");
   var stage = document.getElementById("preloader-stage");
   var pattern = document.getElementById("preloader-pattern");
+  var photo = document.getElementById("preloader-photo");
+  var scrim = document.getElementById("preloader-scrim");
   if (!preloader) { root.classList.remove("is-loading"); return; }
 
   /* posizione della riga orizzontale dentro l'immagine reale del logo
@@ -63,6 +66,7 @@
   gsap.set(wordTop, { y: -26, opacity: 0 });
   gsap.set(wordBottom, { y: 26, opacity: 0 });
   gsap.set(lineFill, { scaleX: 0 });
+  if (percentEl) gsap.set(percentEl, { opacity: 1 });
   if (logo) gsap.set(logo, { opacity: 0 });
 
   /* ---- progresso reale: alcune foto chiave + font ---- */
@@ -108,6 +112,7 @@
     display += (target - display) * .09;
     if (target === 100 && display > 99.3) display = 100;
     if (lineFill) lineFill.style.transform = "scaleX(" + (display / 100) + ")";
+    if (percentEl) percentEl.textContent = Math.round(display) + "%";
     if (display >= 100) {
       closing = true;
       clearInterval(tickTimer);
@@ -146,6 +151,7 @@
       gsap.set(lineFill, { transformOrigin: "50% 50%" });
       tl.to(lineFill, { scaleY: 3.4, duration: .3, ease: "power2.in" }, 0)
         .to(line, { opacity: 0, duration: .35, ease: "power2.inOut" }, .12)
+        .to(percentEl, { opacity: 0, duration: .3, ease: "power2.inOut" }, .12)
         .to(logo, { opacity: 1, duration: .5, ease: "power2.out" }, .22)
         .to(logo, {
           scale: 1.03, duration: .22, ease: "power1.inOut", yoyo: true, repeat: 1, transformOrigin: "50% 50%"
@@ -177,6 +183,8 @@
 
     gsap.to(preloader, { backgroundColor: "rgba(251, 249, 244, 0)", duration: .5, ease: "power2.out" });
     if (pattern) gsap.to(pattern, { opacity: 0, duration: .4, ease: "power2.out" });
+    if (photo) gsap.to(photo, { opacity: 0, duration: .45, ease: "power2.out" });
+    if (scrim) gsap.to(scrim, { opacity: 0, duration: .45, ease: "power2.out" });
     gsap.to(logo, {
       x: dx, y: dy, scale: scale,
       transformOrigin: "50% 50%",
