@@ -725,7 +725,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .map-dot { fill: var(--wood); stroke: #fff; stroke-width: 2.5; }
 .map-pulse {
   fill: none; stroke: var(--wood-light); stroke-width: 3;
-  transform-origin: 210px 600px;
+  transform-origin: 497px 643px;
   animation: map-pulse 2.2s ease-out infinite;
 }
 @keyframes map-pulse {
@@ -743,7 +743,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   backdrop-filter: blur(4px);
   white-space: nowrap;
 }
-.map-label-bigi { left: 22%; top: 66%; }
+.map-label-bigi { left: 59%; top: 71%; }
 .map-edge {
   position: absolute;
   font-size: 10px; font-weight: 700;
