@@ -250,16 +250,33 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .hero-bg {
   position: absolute;
   inset: -6%;
+  overflow: hidden;
+  background: #1b1815;
+}
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+}
+.hero-bg-layer--1 { background-position: 68% 55%; z-index: 1; }
+.hero-bg-layer--2 { background-position: center 30%; z-index: 2; }
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   background:
-    radial-gradient(120% 130% at 26% 18%, rgba(207, 168, 118, .30), transparent 58%),
-    radial-gradient(110% 120% at 78% 88%, rgba(169, 120, 74, .40), transparent 62%),
-    linear-gradient(155deg, #241f1a 0%, #1b1815 46%, #12100e 100%);
-  will-change: transform;
+    radial-gradient(120% 130% at 26% 18%, rgba(207, 168, 118, .22), transparent 58%),
+    radial-gradient(110% 120% at 78% 88%, rgba(169, 120, 74, .30), transparent 62%),
+    linear-gradient(155deg, rgba(36, 31, 26, .78) 0%, rgba(27, 24, 21, .62) 46%, rgba(18, 16, 14, .8) 100%);
 }
 .hero-bg::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 4;
   background-image: repeating-linear-gradient(115deg, rgba(243, 239, 231, .05) 0, rgba(243, 239, 231, .05) 1px, transparent 1px, transparent 64px);
 }
 .hero-inner {

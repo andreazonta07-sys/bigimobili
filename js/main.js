@@ -70,9 +70,11 @@
     });
   }
 
-  /* ---------- Hero: pin + zoom scrub sullo sfondo segnaposto ---------- */
+  /* ---------- Hero: pin + zoom scrub sulla foto esterna, poi crossfade
+     sulla foto dell'insegna ---------- */
   var heroPin = document.querySelector('.hero-pin');
-  var heroBg = document.querySelector('.hero-bg');
+  var heroBg1 = document.getElementById('hero-bg-1');
+  var heroBg2 = document.getElementById('hero-bg-2');
   var heroScroll = document.querySelector('.hero-scroll');
   /* l'intro (heroIntro, sotto) porta .hero-scroll a opacity:1 con uno stile
      inline: da quel momento in poi solo GSAP può farlo sparire allo scroll,
@@ -82,9 +84,13 @@
     gsap.to(heroScroll, { opacity: progress > 0.02 ? 0 : 1, duration: .3, overwrite: 'auto' });
   }
   if (heroPin && hasG && window.ScrollTrigger) {
-    if (heroBg) gsap.set(heroBg, { scale: 1, transformOrigin: '50% 45%' });
+    /* origine dello zoom verso l'insegna "BI.GI. ARREDAMENTI" sulla facciata,
+       che sta verso il centro-basso-destra della foto (non in basso a
+       sinistra: l'insegna e la porta d'ingresso sono li'). */
+    if (heroBg1) gsap.set(heroBg1, { scale: 1, transformOrigin: '68% 58%' });
+    if (heroBg2) gsap.set(heroBg2, { opacity: 0 });
 
-    if (!reduceMotion && heroBg) {
+    if (!reduceMotion && heroBg1) {
       gsap.timeline({
         scrollTrigger: {
           trigger: heroPin,
@@ -96,8 +102,11 @@
             updateScrollHint(self.progress);
           }
         }
-      }).to(heroBg, { scale: 2.15, ease: 'none', duration: 1 }, 0);
+      })
+        .to(heroBg1, { scale: 1.2, ease: 'none', duration: .62 }, 0)
+        .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62);
     } else {
+      if (heroBg2) gsap.set(heroBg2, { opacity: reduceMotion ? 0 : 0 });
       ScrollTrigger.create({
         trigger: heroPin,
         start: 'top top',
