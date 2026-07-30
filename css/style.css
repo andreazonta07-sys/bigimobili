@@ -54,21 +54,36 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--ink);
+  background: var(--bg-raised);
   display: grid;
   place-items: center;
   overflow: hidden;
 }
+.loader-pattern {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: 320px 320px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cpath d='M0,64 C80,10 160,118 320,64' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.4'/%3E%3Cpath d='M0,166 C80,222 160,110 320,166' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.3'/%3E%3Cpath d='M0,258 C80,204 160,312 320,258' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.35'/%3E%3C/svg%3E");
+}
 .loader-stage {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: clamp(.6rem, 2vw, 1.1rem);
 }
+.loader-logo {
+  position: absolute;
+  top: 0; left: 0;
+  max-width: none;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
 .loader-word {
   font-family: var(--display);
   text-transform: uppercase;
-  color: var(--bg);
+  color: var(--ink);
   line-height: 1;
   letter-spacing: .02em;
 }
@@ -79,19 +94,19 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .loader-word--bottom {
   font-size: clamp(1.5rem, 6vw, 3.4rem);
   font-weight: 300;
-  color: var(--wood-light);
+  color: var(--wood);
 }
 .loader-line {
   width: clamp(180px, 30vw, 340px);
-  height: 1px;
-  background: var(--line-on-ink);
+  height: 2px;
+  background: var(--line);
   position: relative;
   overflow: hidden;
 }
 .loader-line-fill {
   position: absolute;
   inset: 0;
-  background: var(--wood-light);
+  background: var(--ink);
   transform-origin: left;
   /* stato iniziale (scaleX:0) impostato via gsap.set() in js/loader.js,
      mai staticamente qui: è una proprietà che verrà animata nel tempo */
@@ -168,6 +183,16 @@ body.is-loading { overflow: hidden; }
   transition: transform .35s ease;
 }
 .site-nav a:hover::after { transform: scaleX(1); }
+
+.nav-social {
+  display: flex;
+  align-items: center;
+  opacity: .82;
+  transition: opacity .35s, transform .35s;
+}
+.nav-social:hover { opacity: 1; transform: translateY(-1px); }
+.nav-social::after { content: none; }
+.nav-social svg { width: 18px; height: 18px; display: block; }
 
 .nav-toggle {
   display: none;
@@ -391,10 +416,26 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   overflow: hidden;
   box-shadow: var(--shadow);
 }
-.chisiamo-main-photo img { width: 100%; height: 100%; object-fit: contain; background: var(--ink); }
 .chisiamo-side { display: flex; flex-direction: column; gap: clamp(1.2rem, 3vw, 2.4rem); }
 .chisiamo-side-photo { aspect-ratio: var(--ar); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
-.chisiamo-side-photo img { width: 100%; height: 100%; object-fit: contain; background: var(--bg-raised); }
+
+.chisiamo-photo {
+  position: relative;
+  perspective: 900px;
+}
+.chisiamo-photo-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.chisiamo-photo-clip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
 .chisiamo-text {
   margin-top: clamp(2.4rem, 5vw, 3.6rem);
   display: grid;
@@ -443,7 +484,8 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   overflow: hidden;
   min-width: 0;
 }
-.categoria-photo img { width: 100%; height: 100%; object-fit: contain; background: var(--bg-raised); }
+.categoria-photo img,
+.categoria-photo video { width: 100%; height: 100%; object-fit: contain; background: var(--bg-raised); }
 .categoria-body { padding: clamp(1.4rem, 3vw, 2rem); }
 .categoria-body h3 {
   font-family: var(--display);
@@ -472,7 +514,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   animation: gallery-scroll-left var(--dur, 55s) linear infinite;
 }
 .gallery-row--reverse .gallery-track { animation-name: gallery-scroll-right; }
-.gallery-row:hover .gallery-track { animation-play-state: paused; }
 
 @keyframes gallery-scroll-left {
   from { transform: translate3d(0, 0, 0); }
@@ -507,17 +548,51 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 
 /* ============ RECENSIONI (dark) ============ */
 .recensioni-dark {
+  position: relative;
   background: var(--ink);
   color: var(--bg);
 }
 .recensioni-dark .eyebrow { color: var(--wood-light); }
 .recensioni-dark .section-heading { color: var(--bg); }
 
+/* pannello foto: la foto (1440x1800, verticale) resta sempre intera e mai
+   tagliata, a larghezza piena; l'altezza del pannello e' quella del piu'
+   alto tra "foto alla sua proporzione naturale" e "elenco recensioni" —
+   tecnica a griglia (tutti i livelli nella stessa cella), cosi' se le
+   recensioni sono piu' "lunghe" della foto il pannello cresce con loro
+   invece di tagliarle, e se sono piu' corte non lascia comunque scoperto
+   il fondo (resta ink pieno sotto la foto). */
+.recensioni-photo-panel {
+  display: grid;
+  width: min(100%, 1200px);
+  margin: clamp(2.6rem, 6vw, 4rem) auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: var(--ink);
+}
+.recensioni-photo-panel img {
+  grid-area: 1 / 1;
+  align-self: start;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.recensioni-photo-panel::before {
+  content: '';
+  grid-area: 1 / 1;
+  background: linear-gradient(180deg, rgba(20, 18, 16, .62), rgba(20, 18, 16, .75));
+  z-index: 1;
+}
+
 .reviews-list {
-  margin-top: clamp(2.6rem, 6vw, 4rem);
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 2;
+  padding: clamp(2.4rem, 6vw, 4.4rem) clamp(1rem, 4vw, 2.4rem);
   display: flex;
   flex-direction: column;
-  gap: clamp(1.3rem, 3.6vw, 2.2rem);
+  gap: clamp(3.2rem, 9vw, 6.4rem);
   width: min(880px, 92vw);
   margin-inline: auto;
 }
@@ -591,12 +666,74 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 
 .map-shape {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: var(--shadow);
 }
-.map-shape iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.mappa-tiles {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  width: 100%; height: 100%;
+}
+.mappa-tiles img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mappa-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-dot { fill: var(--wood); stroke: #fff; stroke-width: 2.5; }
+.map-pulse {
+  fill: none; stroke: var(--wood-light); stroke-width: 3;
+  transform-origin: 210px 600px;
+  animation: map-pulse 2.2s ease-out infinite;
+}
+@keyframes map-pulse {
+  0% { transform: scale(.6); opacity: 1; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.map-label {
+  position: absolute;
+  font-family: var(--display); text-transform: uppercase;
+  font-weight: 600; letter-spacing: .06em;
+  font-size: clamp(12px, 1.4vw, 15px);
+  color: #fff; text-shadow: 0 2px 10px rgba(0, 0, 0, .8);
+  background: rgba(27, 24, 21, .55);
+  padding: 6px 14px; border-radius: 99px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+.map-label-bigi { left: 22%; top: 66%; }
+.map-edge {
+  position: absolute;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .9);
+  background: rgba(27, 24, 21, .45);
+  padding: 5px 12px; border-radius: 99px;
+  white-space: nowrap;
+}
+.map-edge-n { top: 8px; left: 50%; transform: translateX(-50%); }
+.map-edge-s { bottom: 8px; left: 50%; transform: translateX(-50%); }
+.map-edge-w { left: 17px; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); }
+.map-edge-e { left: auto; right: 17px; top: 50%; transform: translate(50%, -50%) rotate(90deg); }
+.map-compass {
+  position: absolute; top: 12px; right: 12px;
+  width: clamp(52px, 7.5vw, 76px);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .35));
+}
+.compass-needle {
+  transform-origin: 50% 50%;
+  animation: compass-sway 7s ease-in-out infinite;
+}
+@keyframes compass-sway {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(5deg); }
+  62% { transform: rotate(-4deg); }
+}
+.map-credit {
+  position: absolute; right: 10px; bottom: 8px;
+  font-size: 9px; color: rgba(255, 255, 255, .75);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .8);
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-pulse, .compass-needle { animation: none; }
+}
 
 /* ============ FOOTER ============ */
 .site-footer {

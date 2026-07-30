@@ -26,6 +26,15 @@
   /* fallback: se il preloader non esiste proprio (no-js/errore), mostra comunque il logo */
   if (!document.getElementById('preloader')) showBrand();
 
+  /* ---------- Logo header: si rimpicciolisce scrollando via dalla cima ---------- */
+  if (brand && hasG && window.ScrollTrigger && !reduceMotion) {
+    gsap.set(brand, { transformOrigin: '0% 50%' });
+    gsap.to(brand, {
+      scale: .72, ease: 'none',
+      scrollTrigger: { trigger: document.body, start: 'top top', end: '+=140', scrub: .3 }
+    });
+  }
+
   /* ---------- Nav mobile ---------- */
   var toggle = document.querySelector('.nav-toggle');
   if (toggle) {
@@ -154,6 +163,111 @@
       el.style.opacity = 1;
     });
   }
+
+  /* ---------- Chi siamo: foto con wipe direzionale + parallax continuo + tilt hover ---------- */
+  (function chiSiamoPhotos() {
+    var photos = gsap.utils.toArray('.chisiamo-photo');
+    if (!photos.length) return;
+
+    var INSET_BY_WIPE = {
+      left: 'inset(0% 100% 0% 0%)',
+      top: 'inset(0% 0% 100% 0%)',
+      bottom: 'inset(100% 0% 0% 0%)'
+    };
+
+    if (!hasG || !window.ScrollTrigger || reduceMotion) {
+      photos.forEach(function (fig) {
+        var clip = fig.querySelector('.chisiamo-photo-clip');
+        if (clip) clip.style.clipPath = 'inset(0% 0% 0% 0%)';
+      });
+      return;
+    }
+
+    photos.forEach(function (fig, i) {
+      var clip = fig.querySelector('.chisiamo-photo-clip');
+      var img = fig.querySelector('img');
+      var wipe = fig.getAttribute('data-wipe') || 'left';
+
+      if (clip) {
+        gsap.set(clip, { clipPath: INSET_BY_WIPE[wipe] || INSET_BY_WIPE.left });
+        gsap.to(clip, {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 1.1,
+          delay: i * .12,
+          ease: 'power4.inOut',
+          scrollTrigger: { trigger: fig, start: 'top 85%', toggleActions: 'play none none none' }
+        });
+      }
+
+      if (img) {
+        gsap.set(img, { scale: 1.18 });
+        gsap.fromTo(img,
+          { yPercent: -6 },
+          {
+            yPercent: 6, ease: 'none',
+            scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: .6 }
+          }
+        );
+      }
+    });
+
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      photos.forEach(function (fig) {
+        var rotX = gsap.quickTo(fig, 'rotationX', { duration: .6, ease: 'power3.out' });
+        var rotY = gsap.quickTo(fig, 'rotationY', { duration: .6, ease: 'power3.out' });
+        var lift = gsap.quickTo(fig, 'scale', { duration: .6, ease: 'power3.out' });
+        fig.addEventListener('pointermove', function (e) {
+          var r = fig.getBoundingClientRect();
+          var px = (e.clientX - r.left) / r.width - .5;
+          var py = (e.clientY - r.top) / r.height - .5;
+          rotX(py * -10);
+          rotY(px * 10);
+          lift(1.015);
+        });
+        fig.addEventListener('pointerleave', function () {
+          rotX(0); rotY(0); lift(1);
+        });
+      });
+    }
+  })();
+
+  /* ---------- Recensioni: card che ruotano in ingresso + stelle a scintilla ---------- */
+  (function reviewCards() {
+    var cards = gsap.utils.toArray('.review-card');
+    if (!cards.length) return;
+
+    cards.forEach(function (card) {
+      var starsEl = card.querySelector('.review-stars');
+      if (starsEl && !starsEl.querySelector('span')) {
+        var chars = starsEl.textContent.split('');
+        starsEl.textContent = '';
+        chars.forEach(function (ch) {
+          var s = document.createElement('span');
+          s.textContent = ch;
+          s.style.display = 'inline-block';
+          starsEl.appendChild(s);
+        });
+      }
+    });
+
+    if (!hasG || !window.ScrollTrigger || reduceMotion) return;
+
+    cards.forEach(function (card, i) {
+      var fromRight = card.getAttribute('data-align') === 'right';
+      var stars = card.querySelectorAll('.review-stars span');
+
+      gsap.set(card, { opacity: 0, y: 60, scale: .92, rotate: fromRight ? 5 : -5, transformOrigin: '50% 100%' });
+      if (stars.length) gsap.set(stars, { opacity: 0, scale: 0 });
+
+      var tl = gsap.timeline({
+        scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none none' }
+      });
+      tl.to(card, { opacity: 1, y: 0, scale: 1, rotate: 0, duration: .85, ease: 'back.out(1.5)' });
+      if (stars.length) {
+        tl.to(stars, { opacity: 1, scale: 1, duration: .35, ease: 'back.out(3)', stagger: .07 }, '-=.35');
+      }
+    });
+  })();
 
   /* ---------- Marquee striscia testuale: scorrimento continuo + spinta scroll ---------- */
   document.querySelectorAll('.marquee-strip .marquee-track').forEach(function (track) {

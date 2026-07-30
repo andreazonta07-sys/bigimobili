@@ -14,10 +14,12 @@
 
   <!-- ============ PRELOADER ============ -->
   <div class="loader" id="preloader" aria-hidden="true">
-    <div class="loader-stage">
+    <div class="loader-pattern" id="preloader-pattern"></div>
+    <div class="loader-stage" id="preloader-stage">
       <span class="loader-word loader-word--top" id="preloader-top">Bi.Gi.</span>
       <div class="loader-line"><div class="loader-line-fill" id="preloader-line-fill"></div></div>
       <span class="loader-word loader-word--bottom" id="preloader-bottom">Mobili</span>
+      <img class="loader-logo" id="preloader-logo" src="img/logo-bigi-mark.webp" alt="" width="750" height="750">
     </div>
   </div>
 
@@ -38,6 +40,15 @@
           <li><a href="#lavori">Lavori</a></li>
           <li><a href="#recensioni">Recensioni</a></li>
           <li><a href="#dove-siamo">Dove siamo</a></li>
+          <li>
+            <a class="nav-social" href="https://www.instagram.com/bi.gi.mobili/" target="_blank" rel="noopener" aria-label="Bi.Gi. Mobili su Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5"/>
+                <circle cx="12" cy="12" r="4.2"/>
+                <circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -85,15 +96,21 @@
         <p class="lead" data-reveal>Da Cartigliano, lavoriamo il legno per dare forma ad arredi pensati attorno a chi li vivrà: ogni spazio, ogni misura, ogni finitura nasce da un progetto su misura, non da un catalogo.</p>
 
         <div class="chisiamo-grid">
-          <figure class="chisiamo-main-photo native-cap" style="--ar:1800/1350; --nw:1800px" data-reveal>
-            <img src="img/chisiamo-cucina-travi.webp" alt="Cucina su misura Bi.Gi. Mobili con travi a vista, ante in legno chiaro ed elettrodomestici a incasso" width="1800" height="1350" loading="lazy">
+          <figure class="chisiamo-main-photo native-cap chisiamo-photo" data-wipe="left" style="--ar:1800/1350; --nw:1800px">
+            <div class="chisiamo-photo-clip">
+              <img src="img/chisiamo-cucina-travi.webp" alt="Cucina su misura Bi.Gi. Mobili con travi a vista, ante in legno chiaro ed elettrodomestici a incasso" width="1800" height="1350" loading="lazy">
+            </div>
           </figure>
-          <div class="chisiamo-side" data-reveal-group>
-            <figure class="chisiamo-side-photo native-cap" style="--ar:1152/1440; --nw:1152px">
-              <img src="img/chisiamo-dettaglio-legno.webp" alt="Dettaglio di un piano cucina in legno con lavello a filo e finestra sul giardino" width="1152" height="1440" loading="lazy">
+          <div class="chisiamo-side">
+            <figure class="chisiamo-side-photo native-cap chisiamo-photo" data-wipe="top" style="--ar:1152/1440; --nw:1152px">
+              <div class="chisiamo-photo-clip">
+                <img src="img/chisiamo-dettaglio-legno.webp" alt="Dettaglio di un piano cucina in legno con lavello a filo e finestra sul giardino" width="1152" height="1440" loading="lazy">
+              </div>
             </figure>
-            <figure class="chisiamo-side-photo native-cap" style="--ar:1/1; --nw:750px">
-              <img src="img/chisiamo-dettaglio-quadra.webp" alt="Dettaglio di ante e piano cucina in legno naturale" width="750" height="750" loading="lazy">
+            <figure class="chisiamo-side-photo native-cap chisiamo-photo" data-wipe="bottom" style="--ar:1/1; --nw:750px">
+              <div class="chisiamo-photo-clip">
+                <img src="img/chisiamo-dettaglio-quadra.webp" alt="Dettaglio di ante e piano cucina in legno naturale" width="750" height="750" loading="lazy">
+              </div>
             </figure>
           </div>
         </div>
@@ -116,10 +133,10 @@
           <article class="categoria-card">
             <div class="categoria-photos" style="--cols:2">
               <div class="categoria-photo" style="--ar:1152/1440">
-                <img src="img/cucina-legno-forno.webp" alt="Cucina su misura in legno con forno a incasso e retro cottura scuro" width="1152" height="1440" loading="lazy">
+                <video src="img/video-showroom.mp4" poster="img/video-showroom-poster.webp" width="720" height="1280" muted loop autoplay playsinline aria-label="Video dello showroom Bi.Gi. Mobili"></video>
               </div>
-              <div class="categoria-photo" style="--ar:750/938">
-                <img src="img/cucina-taupe-vetro.webp" alt="Cucina su misura con retro cucina in vetro e top scuro" width="750" height="938" loading="lazy">
+              <div class="categoria-photo" style="--ar:1440/1081">
+                <img src="img/cucina-isola-bancone.webp" alt="Cucina su misura con isola in nero e legno, top scuro e sgabelli" width="1440" height="1081" loading="lazy">
               </div>
             </div>
             <div class="categoria-body">
@@ -185,7 +202,7 @@
       </div>
 
       <div class="lavori-rows">
-        <div class="gallery-row" style="--dur:52s">
+        <div class="gallery-row" style="--dur:65s">
           <div class="gallery-track">
             <div class="gallery-item"><img src="img/camera-armadio-scrivania.webp" alt="Camera su misura con armadiatura e scrittoio" width="1440" height="1080" loading="lazy"></div>
             <div class="gallery-item"><img src="img/cucina-legno-forno.webp" alt="Cucina su misura in legno con forno a incasso" width="1152" height="1440" loading="lazy"></div>
@@ -195,7 +212,7 @@
             <div class="gallery-item"><img src="img/camera-testiera-libreria.webp" alt="Camera su misura con armadiatura sopra al letto" width="1080" height="1440" loading="lazy"></div>
             <div class="gallery-item"><img src="img/cucina-nicchie-sgabelli.webp" alt="Cucina su misura con isola, nicchie illuminate e sgabelli" width="1440" height="1080" loading="lazy"></div>
             <div class="gallery-item"><img src="img/armadio-vetro-corridoio.webp" alt="Armadiatura su misura con ante a specchio in corridoio" width="1152" height="1440" loading="lazy"></div>
-            <div class="gallery-item"><img src="img/chisiamo-cucina-travi.webp" alt="Cucina su misura con travi a vista" width="1800" height="1350" loading="lazy"></div>
+            <div class="gallery-item"><img src="img/lavori-cucina-travi-crop.webp" alt="Cucina su misura con travi a vista" width="1800" height="770" loading="lazy"></div>
             <div class="gallery-item"><img src="img/bagno-doppio-lavabo.webp" alt="Mobile bagno su misura a doppio lavabo in legno" width="1440" height="1080" loading="lazy"></div>
             <div class="gallery-item"><img src="img/bar-bancone-locale.webp" alt="Arredo su misura per bancone bar con scaffalature in metallo e legno" width="1440" height="1080" loading="lazy"></div>
 
@@ -208,20 +225,18 @@
             <div class="gallery-item" aria-hidden="true"><img src="img/camera-testiera-libreria.webp" alt="" width="1080" height="1440" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/cucina-nicchie-sgabelli.webp" alt="" width="1440" height="1080" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/armadio-vetro-corridoio.webp" alt="" width="1152" height="1440" loading="lazy"></div>
-            <div class="gallery-item" aria-hidden="true"><img src="img/chisiamo-cucina-travi.webp" alt="" width="1800" height="1350" loading="lazy"></div>
+            <div class="gallery-item" aria-hidden="true"><img src="img/lavori-cucina-travi-crop.webp" alt="" width="1800" height="770" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/bagno-doppio-lavabo.webp" alt="" width="1440" height="1080" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/bar-bancone-locale.webp" alt="" width="1440" height="1080" loading="lazy"></div>
           </div>
         </div>
 
-        <div class="gallery-row gallery-row--reverse" style="--dur:60s">
+        <div class="gallery-row gallery-row--reverse" style="--dur:75s">
           <div class="gallery-track">
-            <div class="gallery-item">
-              <video src="img/video-showroom.mp4" poster="img/video-showroom-poster.webp" width="720" height="1280" muted loop autoplay playsinline aria-label="Video dello showroom Bi.Gi. Mobili"></video>
-            </div>
+            <div class="gallery-item"><img src="img/cucina-legno-forno.webp" alt="Cucina su misura in legno con forno a incasso e retro cottura scuro" width="1152" height="1440" loading="lazy"></div>
             <div class="gallery-item"><img src="img/cucina-taupe-vetro.webp" alt="Cucina su misura con retro cucina in vetro e top scuro" width="750" height="938" loading="lazy"></div>
             <div class="gallery-item"><img src="img/chisiamo-dettaglio-legno.webp" alt="Dettaglio piano cucina in legno con lavello a filo" width="1152" height="1440" loading="lazy"></div>
-            <div class="gallery-item"><img src="img/cucina-isola-bancone.webp" alt="Cucina su misura con isola e sgabelli" width="1440" height="1081" loading="lazy"></div>
+            <div class="gallery-item"><img src="img/cucina-taupe-vetro.webp" alt="Cucina su misura con retro cucina in vetro e top scuro" width="750" height="938" loading="lazy"></div>
             <div class="gallery-item"><img src="img/boiserie-vetrine-dettaglio.webp" alt="Parete attrezzata con mensole e vetrine illuminate" width="1152" height="1440" loading="lazy"></div>
             <div class="gallery-item"><img src="img/soggiorno-mobile-tv.webp" alt="Mobile soggiorno sospeso su misura con vetrina" width="1440" height="1081" loading="lazy"></div>
             <div class="gallery-item"><img src="img/soggiorno-libreria-doghe.webp" alt="Libreria a parete su misura in legno e metallo" width="749" height="937" loading="lazy"></div>
@@ -231,12 +246,10 @@
             <div class="gallery-item"><img src="img/ristorante-boiserie-giapponese.webp" alt="Arredo su misura per sala di un locale con boiserie decorativa" width="1440" height="1080" loading="lazy"></div>
 
             <!-- copia del track per il loop infinito -->
-            <div class="gallery-item" aria-hidden="true">
-              <video src="img/video-showroom.mp4" poster="img/video-showroom-poster.webp" width="720" height="1280" muted loop autoplay playsinline></video>
-            </div>
+            <div class="gallery-item" aria-hidden="true"><img src="img/cucina-legno-forno.webp" alt="" width="1152" height="1440" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/cucina-taupe-vetro.webp" alt="" width="750" height="938" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/chisiamo-dettaglio-legno.webp" alt="" width="1152" height="1440" loading="lazy"></div>
-            <div class="gallery-item" aria-hidden="true"><img src="img/cucina-isola-bancone.webp" alt="" width="1440" height="1081" loading="lazy"></div>
+            <div class="gallery-item" aria-hidden="true"><img src="img/cucina-taupe-vetro.webp" alt="" width="750" height="938" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/boiserie-vetrine-dettaglio.webp" alt="" width="1152" height="1440" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/soggiorno-mobile-tv.webp" alt="" width="1440" height="1081" loading="lazy"></div>
             <div class="gallery-item" aria-hidden="true"><img src="img/soggiorno-libreria-doghe.webp" alt="" width="749" height="937" loading="lazy"></div>
@@ -267,10 +280,12 @@
     <!-- ============ DICONO DI NOI ============ -->
     <section class="section recensioni-dark" id="recensioni">
       <div class="wrap">
-        <p class="eyebrow" data-reveal>Dicono di noi</p>
-        <h2 class="section-heading" data-reveal>Chi ha scelto Bi.Gi.</h2>
+        <h2 class="section-heading" data-reveal>Dicono di noi</h2>
+      </div>
 
-        <div class="reviews-list" data-reveal-group>
+      <div class="recensioni-photo-panel" data-reveal>
+        <img src="img/recensioni-boiserie-doghe.webp" alt="" width="1440" height="1800" loading="lazy">
+        <div class="reviews-list">
           <article class="review-card" data-align="left">
             <div class="review-stars" aria-label="5 stelle su 5">★★★★★</div>
             <h4>Cucina disegnata sulla nostra casa</h4>
@@ -285,6 +300,11 @@
             <div class="review-stars" aria-label="5 stelle su 5">★★★★★</div>
             <h4>Boiserie in soggiorno, molto soddisfatti</h4>
             <p>«Volevamo una parete attrezzata diversa dal solito mobile componibile. Il progetto di boiserie che ci hanno proposto ha cambiato completamente il soggiorno. Disponibilità e precisione dall'inizio alla fine.»</p>
+          </article>
+          <article class="review-card" data-align="right">
+            <div class="review-stars" aria-label="5 stelle su 5">★★★★★</div>
+            <h4>Mobile bagno su misura, tempi rispettati</h4>
+            <p>«Spazio stretto e impianti già fatti: non era semplice. Ci hanno proposto un mobile su misura con lavabo in pietra che risolve tutto senza sembrare un ripiego. Consegna e posa rispettate come da preventivo.»</p>
           </article>
         </div>
       </div>
@@ -310,13 +330,60 @@
               <li><span>Sabato</span><span>09:00&ndash;12:00 &middot; 16:30&ndash;19:00</span></li>
               <li><span>Domenica</span><span>10:00&ndash;12:00</span></li>
             </ul>
-            <p class="hours-note">Orari da confermare telefonicamente prima della visita.</p>
           </div>
 
           <div class="map-shape" data-reveal>
-            <iframe loading="lazy" title="Mappa: Bi.Gi. Mobili, Viale Cappello 4, Cartigliano"
-              src="https://www.google.com/maps?q=Viale+Cappello+4,+36050+Cartigliano+VI&z=16&output=embed"
-              referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            <div class="mappa-tiles" aria-label="Vista satellitare di Cartigliano">
+              <img src="img/map/tile_0_0.jpg" alt=""><img src="img/map/tile_1_0.jpg" alt=""><img src="img/map/tile_2_0.jpg" alt="">
+              <img src="img/map/tile_0_1.jpg" alt=""><img src="img/map/tile_1_1.jpg" alt=""><img src="img/map/tile_2_1.jpg" alt="">
+              <img src="img/map/tile_0_2.jpg" alt=""><img src="img/map/tile_1_2.jpg" alt=""><img src="img/map/tile_2_2.jpg" alt="">
+            </div>
+            <svg class="mappa-overlay" viewBox="0 0 768 768" aria-hidden="true">
+              <!-- alone + punto sulla falegnameria, vicino a Piazza della Concordia -->
+              <circle class="map-pulse" cx="210" cy="600" r="14"/>
+              <circle class="map-dot" cx="210" cy="600" r="7"/>
+            </svg>
+            <span class="map-label map-label-bigi">Bi.Gi. Mobili</span>
+            <span class="map-edge map-edge-n">Nove &middot; Bassano del Grappa</span>
+            <span class="map-edge map-edge-s">Ros&agrave; &middot; Cittadella</span>
+            <span class="map-edge map-edge-w">Tezze sul Brenta</span>
+            <span class="map-edge map-edge-e">Pozzoleone</span>
+            <!-- bussola a tema falegnameria: corona di tasselli in legno, perno al centro -->
+            <svg class="map-compass" viewBox="0 0 100 100" aria-hidden="true">
+              <g fill="var(--bg-raised)" stroke="var(--wood-light)" stroke-width="1.5">
+                <circle cx="90" cy="50" r="7"/><circle cx="84.6" cy="70" r="7"/><circle cx="70" cy="84.6" r="7"/>
+                <circle cx="50" cy="90" r="7"/><circle cx="30" cy="84.6" r="7"/><circle cx="15.4" cy="70" r="7"/>
+                <circle cx="10" cy="50" r="7"/><circle cx="15.4" cy="30" r="7"/><circle cx="30" cy="15.4" r="7"/>
+                <circle cx="50" cy="10" r="7"/><circle cx="70" cy="15.4" r="7"/><circle cx="84.6" cy="30" r="7"/>
+              </g>
+              <circle cx="50" cy="50" r="40" fill="var(--bg-raised)"/>
+              <circle cx="50" cy="50" r="32.5" fill="var(--bg)" stroke="var(--wood-light)" stroke-width="1.4"/>
+              <!-- tasselli in legno tra i punti cardinali -->
+              <g>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood)" transform="rotate(30 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood-light)" transform="rotate(60 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--ink)" transform="rotate(120 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood)" transform="rotate(150 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood-light)" transform="rotate(210 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--ink)" transform="rotate(240 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood)" transform="rotate(300 50 50)"/>
+                <rect x="48.9" y="21" width="2.2" height="6" rx="1.1" fill="var(--wood-light)" transform="rotate(330 50 50)"/>
+              </g>
+              <g font-family="var(--display)" font-weight="600" font-size="11" fill="var(--ink)" text-anchor="middle">
+                <text x="50" y="20.5">N</text>
+                <text x="82" y="53.6">E</text>
+                <text x="50" y="89">S</text>
+                <text x="18" y="53.6">O</text>
+              </g>
+              <g class="compass-needle">
+                <path d="M50 27 L55.5 50 L44.5 50 Z" fill="var(--wood)"/>
+                <path d="M50 73 L55.5 50 L44.5 50 Z" fill="var(--ink)"/>
+              </g>
+              <!-- il perno centrale -->
+              <circle cx="50" cy="50" r="4.6" fill="var(--ink)"/>
+              <circle cx="48.6" cy="48.6" r="1.3" fill="var(--wood-light)"/>
+            </svg>
+            <span class="map-credit">Immagini satellitari &copy; Esri World Imagery</span>
           </div>
         </div>
       </div>
@@ -330,7 +397,7 @@
         <img src="img/logo-bigi.webp" alt="Bi.Gi. Mobili" width="750" height="750" loading="lazy">
       </a>
       <p class="footer-info">
-        Bi.Gi. Mobili &middot; Eredi di Scalco Valentina S.D.F.<br>
+        Bi.Gi. Mobili<br>
         Viale Cappello, 4 &middot; 36050 Cartigliano (VI)<br>
         <a href="tel:+390424828472">0424 828472</a> &middot; <a href="mailto:bigimobili@libero.it">bigimobili@libero.it</a>
       </p>
@@ -341,7 +408,7 @@
         <a href="https://www.instagram.com/bi.gi.mobili/" target="_blank" rel="noopener">Instagram</a>
       </nav>
     </div>
-    <p class="footer-note">&copy; 2026 Bi.Gi. Mobili &middot; Eredi di Scalco Valentina S.D.F. &middot; Cartigliano (VI)</p>
+    <p class="footer-note">&copy; 2026 Bi.Gi. Mobili &middot; Cartigliano (VI)</p>
   </footer>
 
   <script src="libs/gsap.min.js"></script>
