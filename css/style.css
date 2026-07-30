@@ -600,46 +600,55 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .recensioni-dark .eyebrow { color: var(--wood-light); }
 .recensioni-dark .section-heading { color: var(--bg); }
 
-/* pannello foto: l'altezza del pannello e' fissata esattamente sulla
-   proporzione naturale della foto (recensioni-boiserie-doghe.webp,
-   1440x1800 reali, verificati con sips -g) cosi' la foto (posizionata in
-   assoluto, object-fit:contain sulla stessa identica proporzione) copre
-   sempre tutta l'area, senza mai lasciare "spazio nero" scoperto e senza
-   bisogno di ritagliarla o ingrandirla. L'elenco recensioni e' un overlay
-   assoluto sopra la foto: se il suo contenuto e' piu' alto della foto,
-   scorre internamente invece di allungare il pannello (altrimenti si
-   ripresenterebbe lo stesso problema al contrario). */
+/* pannello foto: la foto (1440x1800, verticale) resta sempre intera,
+   mai tagliata e mai ingrandita, a larghezza piena e altezza naturale;
+   l'elenco recensioni resta un partecipante normale della griglia (non un
+   overlay a scorrimento), quindi se il suo contenuto e' piu' alto della
+   foto il pannello continua a crescere con lui, come prima. La differenza
+   e' lo strato .recensioni-photo-fill sotto la foto: una copia sfocata
+   della stessa identica immagine, allargata per coprire l'intera area
+   (compreso l'eventuale spazio sotto alla foto reale) — cosi' non resta
+   mai uno "spazio nero" scoperto, ma una continuazione sfumata dei colori
+   della foto, senza mai ritagliare o zoomare la foto vera in primo piano. */
 .recensioni-photo-panel {
-  position: relative;
+  display: grid;
   width: min(100%, 1200px);
-  aspect-ratio: 1440 / 1800;
   margin: clamp(2.6rem, 6vw, 4rem) auto 0;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: var(--shadow);
   background: var(--ink);
+  isolation: isolate;
+}
+.recensioni-photo-fill {
+  grid-area: 1 / 1;
+  background-image: url("../img/recensioni-boiserie-doghe.webp");
+  background-size: cover;
+  background-position: center 22%;
+  filter: blur(38px) brightness(.6) saturate(1.05);
+  transform: scale(1.18);
 }
 .recensioni-photo-panel img {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
+  align-self: start;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 .recensioni-photo-panel::before {
   content: '';
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 2;
   background: linear-gradient(180deg, rgba(20, 18, 16, .62), rgba(20, 18, 16, .75));
-  z-index: 1;
 }
 
 .reviews-list {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  overflow-y: auto;
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 3;
   padding: clamp(2.4rem, 6vw, 4.4rem) clamp(1rem, 4vw, 2.4rem);
   display: flex;
   flex-direction: column;
