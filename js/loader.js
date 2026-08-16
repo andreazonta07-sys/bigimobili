@@ -46,7 +46,7 @@
 
   function finishUp() {
     root.classList.add("loader-done");
-    root.classList.remove("is-loading", "loader-travelling");
+    root.classList.remove("is-loading");
     fireDone();
     preloader.classList.add("is-hidden");
     setTimeout(function () {
@@ -140,7 +140,7 @@
   }
 
   function converge() {
-    var tl = gsap.timeline({ onComplete: logo ? travelToLogo : outro });
+    var tl = gsap.timeline({ onComplete: outro });
 
     /* ---- la barra si "addensa" sullo spessore della riga vera, poi
        quella riga diventa la riga del logo: stesso punto esatto, nessuno
@@ -163,36 +163,6 @@
           scale: 1.02, duration: .22, ease: "power1.inOut", yoyo: true, repeat: 1, transformOrigin: "50% 50%"
         }, ">-0.05");
     }
-  }
-
-  /* ---- il logo vola dal centro dello schermo fino al suo posto
-     nell'header: stesso concept del monogramma che "vola" sul logo
-     dell'header nel preloader di dep, qui applicato al logo intero
-     (non serve un frammento separato: la riga e' gia' orizzontale come
-     nel logo reale, quindi non c'e' nessuna rotazione da fare). ---- */
-  function travelToLogo() {
-    var headerLogo = document.querySelector(".brand img");
-    if (!headerLogo) { outro(); return; }
-    var from = logo.getBoundingClientRect();
-    var to = headerLogo.getBoundingClientRect();
-    if (!to.width) { outro(); return; }
-
-    var scale = to.width / from.width;
-    var dx = (to.left + to.width / 2) - (from.left + from.width / 2);
-    var dy = (to.top + to.height / 2) - (from.top + from.height / 2);
-
-    gsap.to(preloader, { backgroundColor: "rgba(251, 249, 244, 0)", duration: .5, ease: "power2.out" });
-    if (pattern) gsap.to(pattern, { opacity: 0, duration: .4, ease: "power2.out" });
-    if (photo) gsap.to(photo, { opacity: 0, duration: .45, ease: "power2.out" });
-    if (scrim) gsap.to(scrim, { opacity: 0, duration: .45, ease: "power2.out" });
-    gsap.to(logo, {
-      x: dx, y: dy, scale: scale,
-      transformOrigin: "50% 50%",
-      duration: .85, ease: "power3.inOut",
-      onComplete: finishUp
-    });
-    root.classList.add("loader-travelling");
-    root.classList.remove("is-loading");
   }
 
   function outro() {

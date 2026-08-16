@@ -21,8 +21,9 @@
   function showBrand() {
     if (brand) brand.classList.add('is-visible');
   }
-  window.addEventListener('bigiLoaderDone', showBrand);
-  if (document.documentElement.classList.contains('loader-done')) showBrand();
+  /* il logo dell'header non compare piu' subito a preloader finito: resta
+     nascosto finche' il logo della hero, scrollando, non "vola" al suo
+     posto (vedi il blocco Hero piu' sotto). */
   /* fallback: se il preloader non esiste proprio (no-js/errore), mostra comunque il logo */
   if (!document.getElementById('preloader')) showBrand();
 
@@ -75,7 +76,14 @@
   var heroPin = document.querySelector('.hero-pin');
   var heroBg1 = document.getElementById('hero-bg-1');
   var heroBg2 = document.getElementById('hero-bg-2');
+  var heroLogo = document.getElementById('hero-logo');
+  var headerLogoImg = document.querySelector('.brand img');
   var heroScroll = document.querySelector('.hero-scroll');
+  /* stato iniziale impostato subito (non dentro heroIntro): il preloader
+     copre tutto lo schermo mentre carica, ma sfuma in trasparenza PRIMA
+     che scatti l'evento bigiLoaderDone, quindi il logo della hero deve
+     gia' essere invisibile a quel punto per non fare un flash. */
+  if (heroLogo && hasG && !reduceMotion) gsap.set(heroLogo, { opacity: 0, scale: .92 });
   /* l'intro (heroIntro, sotto) porta .hero-scroll a opacity:1 con uno stile
      inline: da quel momento in poi solo GSAP può farlo sparire allo scroll,
      la regola CSS .scrolled-past non basterebbe più (l'inline vince sempre). */
@@ -83,6 +91,47 @@
     if (!heroScroll || !hasG) return;
     gsap.to(heroScroll, { opacity: progress > 0.02 ? 0 : 1, duration: .3, overwrite: 'auto' });
   }
+
+  /* ---------- Logo hero -> logo header: misura una volta il tragitto
+     (il logo della hero e' centrato in .hero che resta sticky per tutta
+     la durata del pin, l'header e' fixed: entrambe le posizioni restano
+     stabili durante lo scroll, si puo' misurare una volta sola). ---------- */
+  var logoTravel = null;
+  function measureLogoTravel() {
+    if (!heroLogo || !headerLogoImg) { logoTravel = null; return; }
+    gsap.set(heroLogo, { x: 0, y: 0, scale: 1 });
+    var from = heroLogo.getBoundingClientRect();
+    var to = headerLogoImg.getBoundingClientRect();
+    if (!from.width || !to.width) { logoTravel = null; return; }
+    logoTravel = {
+      scale: to.width / from.width,
+      dx: (to.left + to.width / 2) - (from.left + from.width / 2),
+      dy: (to.top + to.height / 2) - (from.top + from.height / 2)
+    };
+  }
+  function updateLogoTravel(progress) {
+    if (!heroLogo || !hasG) return;
+    if (!logoTravel) measureLogoTravel();
+    if (!logoTravel) return;
+    /* il logo resta fermo e grande per la prima meta' del pin, poi nella
+       seconda meta' vola verso l'angolo in alto a sinistra rimpicciolendo
+       fino a sovrapporsi esattamente al logo dell'header. */
+    var t = gsap.utils.clamp(0, 1, (progress - 0.5) / 0.5);
+    gsap.set(heroLogo, {
+      x: logoTravel.dx * t,
+      y: logoTravel.dy * t,
+      scale: gsap.utils.interpolate(1, logoTravel.scale, t),
+      transformOrigin: '50% 50%'
+    });
+    var reveal = gsap.utils.clamp(0, 1, (t - .82) / .18);
+    gsap.set(heroLogo, { opacity: 1 - reveal });
+    if (brand) {
+      if (reveal > 0) brand.classList.add('is-visible');
+      gsap.set(brand, { opacity: reveal });
+    }
+  }
+  window.addEventListener('resize', function () { measureLogoTravel(); });
+
   if (heroPin && hasG && window.ScrollTrigger) {
     /* origine dello zoom verso l'insegna "BI.GI. ARREDAMENTI" sulla facciata,
        che sta verso il centro-basso-destra della foto (non in basso a
@@ -100,6 +149,7 @@
           onUpdate: function (self) {
             heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
             updateScrollHint(self.progress);
+            updateLogoTravel(self.progress);
           }
         }
       })
@@ -107,6 +157,7 @@
         .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62);
     } else {
       if (heroBg2) gsap.set(heroBg2, { opacity: reduceMotion ? 0 : 0 });
+      if (reduceMotion && heroLogo) { gsap.set(heroLogo, { opacity: 0 }); showBrand(); if (brand) gsap.set(brand, { opacity: 1 }); }
       ScrollTrigger.create({
         trigger: heroPin,
         start: 'top top',
@@ -114,24 +165,21 @@
         onUpdate: function (self) {
           heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
           updateScrollHint(self.progress);
+          if (!reduceMotion) updateLogoTravel(self.progress);
         }
       });
     }
   }
 
-  /* ---------- Intro hero: righe del titolo ---------- */
+  /* ---------- Intro hero: il logo compare al centro ---------- */
   function heroIntro() {
-    var lines = document.querySelectorAll('.hero-title .line > span');
-    if (!lines.length || reduceMotion || !hasG) {
-      lines.forEach(function (l) { l.style.transform = 'none'; });
-      return;
-    }
-    gsap.set(lines, { yPercent: 112 });
-    gsap.set('.hero-kicker, .hero-sub, .hero-cta-row, .hero-scroll', { opacity: 0, y: 16 });
-    gsap.to(lines, { yPercent: 0, duration: 1, ease: 'power4.out', stagger: .1, delay: .2 });
-    gsap.to('.hero-kicker, .hero-sub, .hero-cta-row, .hero-scroll', {
-      opacity: 1, y: 0, duration: .85, ease: 'power2.out', stagger: .09, delay: .5
+    if (!heroLogo || reduceMotion || !hasG) return;
+    gsap.to(heroLogo, {
+      opacity: 1, scale: 1, duration: 1, ease: 'power3.out', delay: .2,
+      onComplete: measureLogoTravel
     });
+    gsap.set('.hero-scroll', { opacity: 0, y: 16 });
+    gsap.to('.hero-scroll', { opacity: 1, y: 0, duration: .85, ease: 'power2.out', delay: .5 });
   }
   if (document.getElementById('preloader')) {
     window.addEventListener('bigiLoaderDone', heroIntro);
