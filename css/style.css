@@ -260,7 +260,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 @media (max-width: 760px) {
   .hero-bg { inset: 0; }
   .hero-bg-layer {
-    background-size: auto 62%;
+    background-size: 60% auto;
     background-position: center center;
   }
 }
