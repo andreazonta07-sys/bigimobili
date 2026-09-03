@@ -154,7 +154,8 @@
         }
       })
         .to(heroBg1, { scale: 1.2, ease: 'none', duration: .62 }, 0)
-        .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62);
+        .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62)
+        .to(heroBg1, { opacity: 0, ease: 'none', duration: .38 }, .62);
     } else {
       if (heroBg2) gsap.set(heroBg2, { opacity: reduceMotion ? 0 : 0 });
       if (reduceMotion && heroLogo) { gsap.set(heroLogo, { opacity: 0 }); showBrand(); if (brand) gsap.set(brand, { opacity: 1 }); }
