@@ -255,7 +255,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 
 /* ============ HERO (pin + scrub zoom su sfondo segnaposto) ============ */
 .hero-pin { position: relative; height: 1500px; }
-@media (max-width: 760px) { .hero-pin { height: 1150px; } }
+@media (max-width: 760px) { .hero-pin { height: 950px; } }
 
 .hero {
   position: sticky;
@@ -265,13 +265,13 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background: #3d3934;
+  background: var(--bg-raised);
 }
 .hero-bg {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #3d3934;
+  background: var(--bg-raised);
 }
 .hero-bg-layer {
   position: absolute;
@@ -300,14 +300,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   }
   .hero-bg-photo--1 { aspect-ratio: 6 / 5; background-position: 32% center; }
   .hero-bg-photo--2 { aspect-ratio: 6 / 5; background-position: 22% center; }
-}
-.hero-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background:
-    linear-gradient(180deg, rgba(18, 16, 14, .32) 0%, rgba(18, 16, 14, .05) 30%, rgba(18, 16, 14, .12) 60%, rgba(18, 16, 14, .5) 100%);
 }
 .hero-inner {
   position: relative;
@@ -353,7 +345,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
-  color: rgba(243, 239, 231, .6);
+  color: var(--ink-soft);
   font-size: .68rem;
   letter-spacing: .3em;
   text-transform: uppercase;
@@ -366,7 +358,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 .hero-scroll::after {
   content: '';
   width: 1px; height: 42px;
-  background: rgba(243, 239, 231, .4);
+  background: var(--ink-faint);
   animation: scrollHint 2.4s ease-in-out infinite;
 }
 @keyframes scrollHint {
