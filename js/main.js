@@ -133,10 +133,7 @@
   window.addEventListener('resize', function () { measureLogoTravel(); });
 
   if (heroPin && hasG && window.ScrollTrigger) {
-    /* origine dello zoom verso l'insegna "BI.GI. ARREDAMENTI" sulla facciata,
-       che sta verso il centro-basso-destra della foto (non in basso a
-       sinistra: l'insegna e la porta d'ingresso sono li'). */
-    if (heroBg1) gsap.set(heroBg1, { scale: 1, transformOrigin: '68% 58%' });
+    if (heroBg1) gsap.set(heroBg1, { scale: 1 });
     if (heroBg2) gsap.set(heroBg2, { opacity: 0 });
 
     if (!reduceMotion && heroBg1) {
@@ -153,7 +150,6 @@
           }
         }
       })
-        .to(heroBg1, { scale: 1.2, ease: 'none', duration: .62 }, 0)
         .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62)
         .to(heroBg1, { opacity: 0, ease: 'none', duration: .38 }, .62);
     } else {

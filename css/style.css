@@ -265,13 +265,13 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background: var(--ink);
+  background: #3d3934;
 }
 .hero-bg {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #1b1815;
+  background: #3d3934;
 }
 .hero-bg-layer {
   position: absolute;
@@ -289,6 +289,17 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   background-position: center;
   background-repeat: no-repeat;
   border-radius: clamp(14px, 2.6vw, 28px);
+}
+.hero-bg-photo--1 { aspect-ratio: 2400 / 1589; }
+.hero-bg-photo--2 { aspect-ratio: 2400 / 1800; }
+
+@media (max-width: 760px) {
+  .hero-bg-photo {
+    width: 94%;
+    border-radius: 18px;
+  }
+  .hero-bg-photo--1 { aspect-ratio: 6 / 5; background-position: 32% center; }
+  .hero-bg-photo--2 { aspect-ratio: 6 / 5; background-position: 22% center; }
 }
 .hero-bg::before {
   content: '';
