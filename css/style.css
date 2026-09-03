@@ -255,7 +255,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 
 /* ============ HERO (pin + scrub zoom su sfondo segnaposto) ============ */
 .hero-pin { position: relative; height: 1500px; }
-@media (max-width: 760px) { .hero-pin { height: 950px; } }
+@media (max-width: 760px) { .hero-pin { height: 900px; } }
 
 .hero {
   position: sticky;
