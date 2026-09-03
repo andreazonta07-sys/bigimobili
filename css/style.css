@@ -580,8 +580,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   .gallery-track { animation: none; }
 }
 
-.lavori-cta { margin-top: clamp(2.2rem, 5vw, 3.4rem); display: flex; justify-content: center; }
-
 /* ============ RECENSIONI (dark) ============ */
 .recensioni-dark {
   position: relative;
