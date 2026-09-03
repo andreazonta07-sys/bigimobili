@@ -520,6 +520,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   transform: scale(1.1765);
   transform-origin: 100% 50%;
 }
+.categoria-photo--fill-left img { object-fit: cover; object-position: 100% 50%; }
 .categoria-body { padding: clamp(1.4rem, 3vw, 2rem); }
 .categoria-body h3 {
   font-family: var(--display);
