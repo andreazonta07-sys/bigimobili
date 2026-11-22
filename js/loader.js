@@ -43,17 +43,29 @@
     return;
   }
 
-  /* ---- il palco ha la stessa misura e posizione del logo della hero ---- */
-  function placeStage() {
+  /* ---- il palco segue sempre il logo della hero (posizione e misura
+     reali, anche se su telefono la hero cambia altezza dopo il
+     caricamento): niente salti, solo uno scivolamento morbido ---- */
+  var cur = null, rect = heroLogo.getBoundingClientRect();
+  function follow() {
     var r = heroLogo.getBoundingClientRect();
-    stage.style.left = r.left + "px";
-    stage.style.top = r.top + "px";
-    stage.style.width = r.width + "px";
-    stage.style.height = r.height + "px";
-    return r;
+    if (!r.width) return;
+    rect = r;
+    if (!cur) cur = { l: r.left, t: r.top, w: r.width, h: r.height };
+    else {
+      var k = .16;
+      cur.l += (r.left - cur.l) * k; cur.t += (r.top - cur.t) * k;
+      cur.w += (r.width - cur.w) * k; cur.h += (r.height - cur.h) * k;
+    }
+    stage.style.left = cur.l + "px"; stage.style.top = cur.t + "px";
+    stage.style.width = cur.w + "px"; stage.style.height = cur.h + "px";
   }
-  var rect = placeStage();
-  window.addEventListener("resize", function () { if (preloader.parentNode) rect = placeStage(); });
+  function settled() {
+    return !cur || (Math.abs(cur.l - rect.left) < .6 && Math.abs(cur.t - rect.top) < .6 && Math.abs(cur.w - rect.width) < .6);
+  }
+  follow();
+  gsap.ticker.add(follow);
+  var followTimer = setInterval(follow, 50); /* anche con tab in secondo piano */
 
   /* ---- ritagli del logo, posizionati in % sul quadrato 750x750 ---- */
   var el = {};
@@ -70,7 +82,7 @@
     el[p.n] = im;
   });
 
-  var S = function () { return rect.height || 300; };
+  var S = function () { return (cur && cur.h) || rect.height || 300; };
   var TOP = ["B", "i1", "p1", "G", "i2", "p2"];
   var BOTTOM = ["M", "o", "b", "i3", "l", "i4"];
 
@@ -147,11 +159,17 @@
   /* 5. il logo e' completo: sotto compare la piastra bianca (come nella hero),
      lo sfondo del preloader si dissolve e il logo resta li' dov'e' */
   function outro() {
-    var tl = gsap.timeline({ onComplete: finishUp });
+    /* se il logo della hero e' ancora in movimento, aspetta che il palco lo raggiunga */
+    var tl = gsap.timeline({ onComplete: function () { gsap.ticker.remove(follow); clearInterval(followTimer); finishUp(); } });
     tl.to(plate, { opacity: 1, duration: .55, ease: "sine.inOut" }, 0)
       .to(bg, { opacity: 0, duration: .9, ease: "sine.inOut" }, .1)
       /* il logo vero della hero appare (identico) e il palco puo' sparire */
-      .add(function () { window.dispatchEvent(new Event("bigiLogoReady")); }, ">-0.05")
+      .to({}, { duration: .6 }, ">-0.05")
+      .add(function () {
+        var n = 0;
+        (function wait() { if (settled() || ++n > 30) window.dispatchEvent(new Event("bigiLogoReady")); else setTimeout(wait, 50); })();
+      })
+      .to({}, { duration: .25 })
       .to(stage, { opacity: 0, duration: .01 }, ">.05");
   }
 })();
