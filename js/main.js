@@ -71,114 +71,95 @@
     });
   }
 
-  /* ---------- Hero: pin + zoom scrub sulla foto esterna, poi crossfade
-     sulla foto dell'insegna ---------- */
+  /* ---------- Hero: nessun pin, nessuno scrub sulle foto.
+     Le due foto si alternano da sole con una dissolvenza lenta e un
+     respiro (zoom appena percettibile); scrollando, il logo si alleggerisce
+     e sfuma mentre quello dell'header compare con una dissolvenza morbida
+     (basata sul tempo, non sullo scroll: nessuno scatto). ---------- */
   var heroPin = document.querySelector('.hero-pin');
   var heroBg1 = document.getElementById('hero-bg-1');
   var heroBg2 = document.getElementById('hero-bg-2');
   var heroLogo = document.getElementById('hero-logo');
-  var headerLogoImg = document.querySelector('.brand img');
   var heroScroll = document.querySelector('.hero-scroll');
-  /* stato iniziale impostato subito (non dentro heroIntro): il preloader
-     copre tutto lo schermo mentre carica, ma sfuma in trasparenza PRIMA
-     che scatti l'evento bigiLoaderDone, quindi il logo della hero deve
-     gia' essere invisibile a quel punto per non fare un flash. */
-  if (heroLogo && hasG && !reduceMotion) gsap.set(heroLogo, { opacity: 0, scale: .92 });
-  /* l'intro (heroIntro, sotto) porta .hero-scroll a opacity:1 con uno stile
-     inline: da quel momento in poi solo GSAP può farlo sparire allo scroll,
-     la regola CSS .scrolled-past non basterebbe più (l'inline vince sempre). */
+  var heroPhotos = [heroBg1, heroBg2];
+
+  if (hasG) {
+    gsap.set(heroBg2, { opacity: 0 });
+    gsap.set(heroPhotos, { scale: 1.04, transformOrigin: '50% 50%' });
+    if (brand) gsap.set(brand, { opacity: 0, y: -8 });
+  }
+  /* il logo della hero e' invisibile finche' il preloader non ha finito
+     di costruire il logo identico sopra di lui */
+  if (heroLogo && hasG && !reduceMotion && document.getElementById('preloader')) gsap.set(heroLogo, { opacity: 0 });
+
+  var brandShown = false;
+  function toggleBrand(show) {
+    if (!brand || show === brandShown) return;
+    brandShown = show;
+    if (!hasG) { brand.classList.toggle('is-visible', show); brand.style.opacity = show ? 1 : 0; return; }
+    if (show) brand.classList.add('is-visible');
+    gsap.to(brand, { opacity: show ? 1 : 0, y: show ? 0 : -8, duration: .7, ease: 'power2.out', overwrite: 'auto' });
+  }
+
+  function startHeroLoop() {
+    if (!hasG || reduceMotion || !heroBg1 || !heroBg2) return;
+    var idx = 0;
+    /* respiro lento sulla foto visibile */
+    gsap.to(heroPhotos, { scale: 1.1, duration: 14, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 7 });
+    function swap() {
+      var from = heroPhotos[idx], to = heroPhotos[1 - idx];
+      idx = 1 - idx;
+      gsap.to(to, { opacity: 1, duration: 2.2, ease: 'sine.inOut' });
+      gsap.to(from, { opacity: 0, duration: 2.2, ease: 'sine.inOut', delay: .4 });
+      gsap.delayedCall(7, swap);
+    }
+    gsap.delayedCall(5, swap);
+  }
+
+  if (heroPin && hasG && window.ScrollTrigger && !reduceMotion) {
+    /* leggero parallax del logo e della scena, lisciato da Lenis */
+    if (heroLogo) {
+      gsap.fromTo(heroLogo, { yPercent: 0, scale: 1, opacity: 1 }, {
+        yPercent: -14, scale: .9, opacity: 0, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: heroPin, start: 'top top', end: '+=' + Math.round(window.innerHeight * .55), scrub: true }
+      });
+    }
+    gsap.to('.hero-bg', {
+      yPercent: 7, ease: 'none',
+      scrollTrigger: { trigger: heroPin, start: 'top top', end: 'bottom top', scrub: true }
+    });
+    ScrollTrigger.create({
+      trigger: heroPin, start: 'top top', end: '+=' + Math.round(window.innerHeight * .4),
+      onUpdate: function (self) {
+        heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
+        updateScrollHint(self.progress);
+      },
+      onToggle: function (self) { toggleBrand(self.progress > .9 || !self.isActive); }
+    });
+  } else if (heroPin) {
+    toggleBrand(true);
+    if (heroScroll) heroScroll.style.opacity = 0;
+  }
   function updateScrollHint(progress) {
     if (!heroScroll || !hasG) return;
     gsap.to(heroScroll, { opacity: progress > 0.02 ? 0 : 1, duration: .3, overwrite: 'auto' });
   }
 
-  /* ---------- Logo hero -> logo header: misura una volta il tragitto
-     (il logo della hero e' centrato in .hero che resta sticky per tutta
-     la durata del pin, l'header e' fixed: entrambe le posizioni restano
-     stabili durante lo scroll, si puo' misurare una volta sola). ---------- */
-  var logoTravel = null;
-  function measureLogoTravel() {
-    if (!heroLogo || !headerLogoImg) { logoTravel = null; return; }
-    gsap.set(heroLogo, { x: 0, y: 0, scale: 1 });
-    var from = heroLogo.getBoundingClientRect();
-    var to = headerLogoImg.getBoundingClientRect();
-    if (!from.width || !to.width) { logoTravel = null; return; }
-    logoTravel = {
-      scale: to.width / from.width,
-      dx: (to.left + to.width / 2) - (from.left + from.width / 2),
-      dy: (to.top + to.height / 2) - (from.top + from.height / 2)
-    };
+  /* ---------- Intro hero: a preloader concluso ---------- */
+  var heroShown = false;
+  function showHeroLogo() {
+    if (heroShown) return; heroShown = true;
+    if (heroLogo && hasG) gsap.set(heroLogo, { opacity: 1 });
   }
-  function updateLogoTravel(progress) {
-    if (!heroLogo || !hasG) return;
-    if (!logoTravel) measureLogoTravel();
-    if (!logoTravel) return;
-    /* il logo resta fermo e grande per la prima meta' del pin, poi nella
-       seconda meta' vola verso l'angolo in alto a sinistra rimpicciolendo
-       fino a sovrapporsi esattamente al logo dell'header. */
-    var t = gsap.utils.clamp(0, 1, (progress - 0.5) / 0.5);
-    gsap.set(heroLogo, {
-      x: logoTravel.dx * t,
-      y: logoTravel.dy * t,
-      scale: gsap.utils.interpolate(1, logoTravel.scale, t),
-      transformOrigin: '50% 50%'
-    });
-    var reveal = gsap.utils.clamp(0, 1, (t - .82) / .18);
-    gsap.set(heroLogo, { opacity: 1 - reveal });
-    if (brand) {
-      if (reveal > 0) brand.classList.add('is-visible');
-      gsap.set(brand, { opacity: reveal });
-    }
-  }
-  window.addEventListener('resize', function () { measureLogoTravel(); });
-
-  if (heroPin && hasG && window.ScrollTrigger) {
-    if (heroBg1) gsap.set(heroBg1, { scale: 1 });
-    if (heroBg2) gsap.set(heroBg2, { opacity: 0 });
-
-    if (!reduceMotion && heroBg1) {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: heroPin,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1,
-          onUpdate: function (self) {
-            heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
-            updateScrollHint(self.progress);
-            updateLogoTravel(self.progress);
-          }
-        }
-      })
-        .to(heroBg2, { opacity: 1, ease: 'none', duration: .38 }, .62)
-        .to(heroBg1, { opacity: 0, ease: 'none', duration: .38 }, .62);
-    } else {
-      if (heroBg2) gsap.set(heroBg2, { opacity: reduceMotion ? 0 : 0 });
-      if (reduceMotion && heroLogo) { gsap.set(heroLogo, { opacity: 0 }); showBrand(); if (brand) gsap.set(brand, { opacity: 1 }); }
-      ScrollTrigger.create({
-        trigger: heroPin,
-        start: 'top top',
-        end: 'bottom bottom',
-        onUpdate: function (self) {
-          heroPin.classList.toggle('scrolled-past', self.progress > 0.02);
-          updateScrollHint(self.progress);
-          if (!reduceMotion) updateLogoTravel(self.progress);
-        }
-      });
-    }
-  }
-
-  /* ---------- Intro hero: il logo compare al centro ---------- */
   function heroIntro() {
-    if (!heroLogo || reduceMotion || !hasG) return;
-    gsap.to(heroLogo, {
-      opacity: 1, scale: 1, duration: 1, ease: 'power3.out', delay: .2,
-      onComplete: measureLogoTravel
-    });
+    showHeroLogo();
+    if (!hasG || reduceMotion) return;
+    startHeroLoop();
     gsap.set('.hero-scroll', { opacity: 0, y: 16 });
-    gsap.to('.hero-scroll', { opacity: 1, y: 0, duration: .85, ease: 'power2.out', delay: .5 });
+    gsap.to('.hero-scroll', { opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: .6 });
   }
-  if (document.getElementById('preloader')) {
+  if (document.getElementById('preloader') && !reduceMotion && hasG) {
+    window.addEventListener('bigiLogoReady', showHeroLogo);
     window.addEventListener('bigiLoaderDone', heroIntro);
   } else {
     heroIntro();

@@ -55,10 +55,13 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: var(--bg-raised);
-  display: grid;
-  place-items: center;
   overflow: hidden;
+}
+.loader-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-raised);
+  will-change: opacity;
 }
 .loader-photo {
   position: absolute;
@@ -80,57 +83,24 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cpath d='M0,64 C80,10 160,118 320,64' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.4'/%3E%3Cpath d='M0,166 C80,222 160,110 320,166' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.3'/%3E%3Cpath d='M0,258 C80,204 160,312 320,258' stroke='%23cfa876' stroke-width='1.4' fill='none' opacity='0.35'/%3E%3C/svg%3E");
 }
 .loader-stage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(.6rem, 2vw, 1.1rem);
+  position: fixed;
+  z-index: 2;
+  /* left/top/width/height impostati da js/loader.js: stessa misura e
+     posizione del logo della hero */
 }
-.loader-logo {
-  position: absolute;
-  top: 0; left: 0;
-  max-width: none;
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-.loader-word {
-  font-family: var(--display);
-  text-transform: uppercase;
-  color: var(--ink);
-  line-height: 1;
-  letter-spacing: .02em;
-}
-.loader-word--top {
-  font-size: clamp(2.2rem, 9vw, 5.2rem);
-  font-weight: 600;
-}
-.loader-word--bottom {
-  font-size: clamp(1.5rem, 6vw, 3.4rem);
-  font-weight: 300;
-  color: var(--wood);
-}
-.loader-line {
-  width: clamp(180px, 30vw, 340px);
-  height: 2px;
-  background: var(--line);
-  position: relative;
-  overflow: hidden;
-}
-.loader-line-fill {
+.loader-plate {
   position: absolute;
   inset: 0;
-  background: var(--ink);
-  transform-origin: left;
-  /* stato iniziale (scaleX:0) impostato via gsap.set() in js/loader.js,
-     mai staticamente qui: è una proprietà che verrà animata nel tempo */
+  background: #fff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .55);
 }
-.loader-percent {
-  font-family: var(--display);
-  font-variant-numeric: tabular-nums;
-  font-size: clamp(.8rem, 1.6vw, .95rem);
-  font-weight: 500;
-  letter-spacing: .1em;
-  color: var(--ink-soft);
+.loader-glyphs { position: absolute; inset: 0; }
+.loader-glyphs .lg {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity;
 }
 body.is-loading { overflow: hidden; }
 .loader.is-hidden { pointer-events: none; }
@@ -253,14 +223,13 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
   .header-cta { font-size: .64rem; padding: .5rem .8rem; }
 }
 
-/* ============ HERO (pin + scrub zoom su sfondo segnaposto) ============ */
-.hero-pin { position: relative; height: 1500px; }
-@media (max-width: 760px) { .hero-pin { height: 900px; } }
+/* ============ HERO (foto che si alternano da sole, senza pin) ============ */
+.hero-pin { position: relative; }
 
 .hero {
-  position: sticky;
-  top: 0;
+  position: relative;
   height: 100svh;
+  min-height: 520px;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -316,7 +285,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7.5px) rota
 }
 .hero-logo {
   display: block;
-  width: clamp(150px, 24vw, 340px);
+  width: clamp(220px, 30vw, 440px);
   height: auto;
   filter: drop-shadow(0 10px 40px rgba(0, 0, 0, .55));
   will-change: transform, opacity;
